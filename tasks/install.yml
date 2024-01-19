@@ -1,0 +1,62 @@
+---
+
+- name: copy redis script
+  template:
+    src: "redis"
+    dest: /usr/local/bin/redis
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Update package lists
+  apt:
+    update_cache: yes
+
+- name: copy redis script
+  template:
+    src: "redis.service"
+    dest: /etc/systemd/system/redis.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Remove conflicting packages
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - containerd
+    - containerd.io
+
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Install redis tools
+  apt:
+    name: redis-tools
+    state: present
+    update_cache: true
+
+- name: restart redis service is restarted
+  service:
+    name: redis
+    state: restarted
+    enabled: true
+  changed_when: false
+
+- name: wait for redis to become ready
+  wait_for:
+    host: "{{ redis_server_bind }}"
+    port: "{{ redis_server_port }}"
+    state: started
+    delay: 5
+    connect_timeout: 15
+    timeout: 300

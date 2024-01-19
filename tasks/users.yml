@@ -1,0 +1,12 @@
+---
+
+- name: setup group
+  group:
+     name: "{{ redis_group }}"
+     system: false
+
+- name: setup user
+  user:
+     name: "{{ redis_user }}"
+     system: false
+     group: "{{ redis_group }}"
