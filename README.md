@@ -129,6 +129,6 @@ Following things includes in this role:
 ```
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/cypik/ansible-role-docker-redis/blob/master/LICENSE) file for details.
+This project is licensed under the **MIT** License - see the [LICENSE](https://github.com/cypik/ansible-role-docker-redis/blob/master/LICENSE) file for details.
 
 
